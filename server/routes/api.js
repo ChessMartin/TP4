@@ -42,7 +42,27 @@ router.get('/panier', (req, res) => {
  * Le body doit contenir l'id de l'article, ainsi que la quantité voulue
  */
 router.post('/panier', (req, res) => {
-  res.status(501).json({ message: 'Not implemented' })
+  const requestedId = parseInt(req.body.id)
+  const requestedQuantity = parseInt(req.body.quantity)
+  const isId = articles.find(article => article.id == requestedId)
+  const inPanier = req.session.panier.articles.find(articule => articule.id == requestedId)
+  if (isId != null && inPanier == null && requestedQuantity > 0) {
+    req.session.panier.articles.push({id: requestedId, quantity: requestedQuantity})
+    res.json(req.session.panier)
+  }
+  else {
+    var respondMessage = "Error "
+    if (isId == null) {
+      respondMessage += "the article does not exist "
+    }
+    if (requestedQuantity <= 0) {
+      respondMessage += "the quantity is not positive"
+    }
+    if(inPanier != null) {
+      respondMessage += " the article is already in the cart"
+    }
+    res.status(400).json({respondMessage})
+  }
 })
 
 /*
