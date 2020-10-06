@@ -34,7 +34,7 @@ router.use((req, res, next) => {
  * Cette route doit retourner le panier de l'utilisateur, grâce à req.session
  */
 router.get('/panier', (req, res) => {
-  res.status(501).json({ message: 'Not implemented' })
+  res.json(req.session.panier)
 })
 
 /*
