@@ -70,7 +70,11 @@ router.post('/panier', (req, res) => {
  * Le panier est ensuite supprimé grâce à req.session.destroy()
  */
 router.post('/panier/pay', (req, res) => {
-  res.status(501).json({ message: 'Not implemented' })
+  req.session.destroy()
+  var message = "Thank you "
+  message += req.body.firstName + " "
+  message += req.body.name + " for your purchase"
+  res.json({message})
 })
 
 /*
