@@ -78,14 +78,42 @@ router.post('/panier/pay', (req, res) => {
  * Le body doit contenir la quantité voulue
  */
 router.put('/panier/:articleId', (req, res) => {
-  res.status(501).json({ message: 'Not implemented' })
+  const articleInPanier = req.session.panier.articles.find(articule => articule.id == req.params.articleId)
+  const requestedQuantity = parseInt(req.body.quantity)
+  if (articleInPanier != null && requestedQuantity > 0) {
+    let index = req.session.panier.articles.indexOf(articleInPanier)
+    req.session.panier.articles[index].quantity = requestedQuantity
+    res.json(req.session.panier)
+  }
+  else {
+    var respondMessage = "Error "
+    if (requestedQuantity <= 0) {
+      respondMessage += "the quantity is not positive"
+    }
+    if(articleInPanier == null) {
+      respondMessage += " the article is not in the cart"
+    }
+    res.status(400).json({respondMessage})
+  }
 })
 
 /*
  * Cette route doit supprimer un article dans le panier
  */
 router.delete('/panier/:articleId', (req, res) => {
-  res.status(501).json({ message: 'Not implemented' })
+  const articleInPanier = req.session.panier.articles.find(articule => articule.id == req.params.articleId)
+  if (articleInPanier != null) {
+    let index = req.session.panier.articles.indexOf(articleInPanier)
+    req.session.panier.articles.splice(index, 1)
+    res.json(req.session.panier)
+  }
+  else {
+    var respondMessage = "Error "
+    if(articleInPanier == null) {
+      respondMessage += " the article is not in the cart"
+    }
+    res.status(400).json({respondMessage})
+  }
 })
 
 
