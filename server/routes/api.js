@@ -105,7 +105,7 @@ router.put('/panier/:articleId', (req, res) => {
  * Cette route doit supprimer un article dans le panier
  */
 router.delete('/panier/:articleId', (req, res) => {
-  const articleInPanier = req.session.panier.articles.find(articule => articule.id == req.params.articleId)
+  const articleInPanier = req.session.panier.articles.find(article => article.id == req.params.articleId)
   if (articleInPanier != null) {
     let index = req.session.panier.articles.indexOf(articleInPanier)
     req.session.panier.articles.splice(index, 1)

@@ -11,6 +11,8 @@
           <div>
           <button @click="deleteArticle(article.id)">Supprimer</button>
           <button @click="editArticle(article)">Modifier</button>
+          <button v-if="isInPanier(article.id)" @click="removeFromPanier(article.id)">Remove Form Cart</button>
+          <button v-else @click="addToPanier(article.id)">Add to cart</button>
           </div>
         </div>
         <p>{{ article.description }}</p>
@@ -62,6 +64,20 @@ module.exports = {
     }
   },
   methods: {
+    isInPanier(articleId) {
+      if(this.panier.articles.find(article => article.id == articleId) != null) {
+        return true
+      }
+      else {
+        return false
+      }
+    },
+    removeFromPanier(articleId) {
+      this.$emit('remove-from-panier', articleId)
+    },
+    addToPanier(articleId) {
+      this.$emit('add-to-panier', articleId)
+    },
     addArticle () {
       this.$emit('add-article', this.newArticle)
     },
